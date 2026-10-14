@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>给我的女神</title>
+
+<style>
+:root {
+    --ink: #050408;
+    --paper: #f4edf6;
+    --dim: #b9aec0;
+    --glass: rgba(8, 6, 14, 0.72);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+html, body {
+    min-height: 100%;
+}
+
+body {
+    background: var(--ink) url("bg.jpg") center / cover fixed no-repeat;
+    color: var(--paper);
+    font: 17px/1.75 Georgia, "Iowan Old Style", "Songti SC",
+          "Noto Serif CJK SC", serif;
+    overflow-x: hidden;
+}
+
+/* 语言切换按钮 */
+#lg {
+    position: fixed;
+    top: max(12px, env(safe-area-inset-top));
+    right: 12px;
+    z-index: 10;
+    background: var(--glass);
+    color: var(--paper);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 20px;
+    padding: 7px 16px;
+    font: inherit;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+/* 页面 */
+section {
+    display: none;
+    min-height: 100vh;
+    padding: 64px 20px 100px;
+}
+
+section.on {
+    display: block;
+}
+
+/* 文字卡片 */
+.card {
+    max-width: 640px;
+    margin: 0 auto;
+    background: var(--glass);
+    border-radius: 14px;
+    padding: 26px 22px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.card p + p {
+    margin-top: 1.1em;
+}
+
+.card p.h {
+    font-size: 26px;
+    font-style: italic;
+    line-height: 1.3;
+    margin-bottom: 0.8em;
+}
+
+/* 中间图片页面 */
+.halo {
+    position: relative;
+    width: min(92vw, 480px);
+    margin: 0 auto;
+    padding: 60px 0;
+}
+
+.fr {
+    width: 56%;
+    margin: 0 auto;
+    aspect-ratio: 9 / 16;
+    max-height: 68vh;
+    background: #000;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.fr img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* 中间页面的装饰文字 */
+.w {
+    position: absolute;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 17px;
+    white-space: nowrap;
+
+    background: linear-gradient(
+        90deg,
+        #ff5ea8,
+        #ffd36e,
+        #6ef0c2,
+        #6eb7ff,
+        #c58bff,
+        #ff5ea8
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.25));
+}
+
+.w.n {
+    font-size: 30px;
+}
+
+/* 底部导航栏 */
+nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+
+    display: flex;
+    background: rgba(5, 4, 8, 0.92);
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+nav button {
+    flex: 1;
+    min-width: 0;
+    background: none;
+    border: 0;
+    color: var(--dim);
+    font: inherit;
+    font-size: 15px;
+    padding: 15px 4px;
+    cursor: pointer;
+}
+
+/* 第一个与第三个按钮：固定炫彩粉色 */
+nav button:nth-child(1),
+nav button:nth-child(3) {
+    font-style: italic;
+    font-weight: bold;
+
+    background-image: linear-gradient(
+        110deg,
+        #ff4fa3 0%,
+        #ff91ce 25%,
+        #ffd5ed 50%,
+        #ff79c6 75%,
+        #ed439f 100%
+    );
+
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #ff79c6;
+}
+
+/* 当前选中的按钮 */
+nav button.on {
+    box-shadow: inset 0 2px 0 #c58bff;
+}
+
+/* 中间按钮保持普通文字颜色 */
+nav button:nth-child(2) {
+    color: var(--dim);
+    font-style: normal;
+}
+
+/* 键盘焦点 */
+button:focus-visible {
+    outline: 2px solid #6eb7ff;
+    outline-offset: -3px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 语言切换 -->
+<button id="lg">Indonesia</button>
+
+<!-- 第一页 -->
+<section id="s0">
+    <div class="card"></div>
+</section>
+
+<!-- 第二页：图片 -->
+<section id="s1">
+    <div class="halo">
+        <div class="fr">
+            <img src="ig.jpg" alt="图片">
+        </div>
+    </div>
+</section>
+
+<!-- 第三页 -->
+<section id="s2">
+    <div class="card"></div>
+</section>
+
+<!-- 底部导航 -->
+<nav>
+    <button type="button"></button>
+    <button type="button"></button>
+    <button type="button"></button>
+</nav>
+
+<script>
+const D = {
+    id: {
+        p1: `Untuk kamu, yang selalu membuat hariku terasa lebih indah.
+
+Aku tidak tahu harus mulai dari mana, karena terlalu banyak hal dari dirimu yang membuatku kagum. Mungkin aku mulai dari senyummu. Setiap kali kamu tersenyum, semua rasa lelah di hatiku menghilang begitu saja. Senyum itu sederhana, tetapi bagiku ia seperti matahari pagi yang menghangatkan dunia kecilku.
+
+Kamu adalah orang yang baik hati. Kamu peduli pada orang lain, bahkan ketika dirimu sendiri sedang lelah. Cara kamu mendengarkan, cara kamu bertanya kabar, dan cara kamu memberi semangat membuatku merasa dihargai. Di dekatmu, aku tidak perlu berpura-pura menjadi orang lain. Aku bisa menjadi diriku sendiri, dengan semua kekuranganku, dan kamu tetap menerimaku apa adanya.
+
+Kamu juga sangat cerdas dan kuat. Aku melihat bagaimana kamu menghadapi masalah dengan tenang, bagaimana kamu bangkit setelah jatuh, dan bagaimana kamu terus berusaha mengejar mimpi-mimpimu. Kekuatanmu menginspirasiku untuk menjadi pribadi yang lebih baik. Setiap hari aku belajar sesuatu darimu, tentang kesabaran, tentang keberanian, dan tentang arti ketulusan.
+
+Aku suka caramu tertawa. Tawamu lepas dan jujur, dan setiap kali mendengarnya, aku ikut bahagia tanpa alasan. Aku suka caramu berbicara, dengan suara yang lembut namun penuh makna. Aku bahkan suka hal-hal kecil yang mungkin tidak kamu sadari, seperti caramu memilih kata, caramu menatap, dan caramu membuat hal biasa menjadi spesial.
+
+Aku juga suka bagaimana kamu menjalani hidup dengan hati yang lembut. Kamu menghargai hal-hal kecil, menyayangi orang-orang di sekitarmu, dan selalu mencari sisi baik dari setiap keadaan. Sifat itu langka, dan aku bersyukur bisa mengenalnya. Dunia terasa lebih ramah karena ada orang sepertimu di dalamnya, dan bagiku kamu adalah salah satu hal terbaik yang pernah terjadi.
+
+Kamu juga penuh pengertian. Saat aku salah, kamu tidak langsung marah, tetapi mencoba memahami. Saat aku sedang sedih, kamu hadir tanpa perlu diminta. Kehadiranmu mengajarkanku bahwa cinta bukan hanya tentang kata-kata manis, tetapi tentang kesediaan untuk tetap tinggal dan peduli.
+
+Meskipun kita berbicara dengan bahasa yang berbeda, hatiku selalu mengerti kamu. Itulah sebabnya aku mulai belajar bahasa Indonesia, agar aku bisa lebih dekat denganmu dan mengatakan perasaanku dengan kata-kata yang kamu pahami. Setiap kata baru yang kupelajari adalah caraku mengatakan bahwa kamu berarti banyak bagiku.
+
+Bersamamu, hal-hal sederhana menjadi kenangan yang berharga. Obrolan kecil, pesan singkat, dan tawa yang kita bagi, semuanya terasa begitu hangat. Kamu membuatku percaya bahwa kebahagiaan tidak harus besar, cukup hadir dan tulus.
+
+Aku juga ingin kamu tahu bahwa aku bangga padamu. Aku bangga pada setiap usaha yang kamu lakukan, sekecil apa pun itu. Kamu tidak perlu sempurna, karena bagiku kamu sudah luar biasa. Apa pun yang kamu impikan, aku ingin menjadi orang yang mendukungmu dari samping, menggenggam tanganmu saat ragu, dan merayakan bersamamu saat berhasil.
+
+Jika suatu hari kamu merasa lelah atau ragu pada dirimu sendiri, ingatlah bahwa ada seseorang yang selalu percaya padamu. Kamu berharga, kamu dicintai, dan kamu pantas mendapatkan semua hal baik di dunia ini.
+
+Terima kasih karena sudah hadir dalam hidupku. Terima kasih karena sudah sabar, hangat, dan tulus. Kamu bukan hanya seseorang yang kucintai, tetapi juga sahabat, penyemangat, dan rumah bagi hatiku. Aku berharap bisa selalu membuatmu tersenyum, sebagaimana kamu selalu membuatku tersenyum.
+
+Aku masih cinta kamu, hari ini, besok, dan selamanya, sayangku sepenuh hati.`,
+
+        p3: `Perjalanan Kita
+
+Hubungan kita tidak selalu mulus. Ada masa ketika kita saling diam, bukan karena bertengkar, tetapi karena rasa baru di antara kita mulai memudar. Kita menjalani hari masing-masing, dan perlahan jarak yang tak terlihat tumbuh di antara kita. Masa dingin itu tidak mudah, tetapi aku belajar bahwa perasaan juga perlu dirawat.
+
+Lalu datang masa yang lebih sulit lagi. Akunku rusak, dan selama beberapa bulan kita tidak bisa saling menghubungi. Tidak ada pesan, tidak ada kabar, hanya sunyi. Namun dalam sunyi itu, satu hal menjadi jelas: aku tidak pernah melupakanmu, dan kamu pun tidak melupakanku.
+
+Sekarang kita bertemu lagi. Rasanya seperti menemukan kembali sesuatu yang sangat berharga. Aku bersyukur kita diberi kesempatan kedua, dan kali ini aku ingin menjaganya dengan lebih baik. Terima kasih karena kamu tidak melupakanku.
+
+Kita pernah dingin, kita pernah terpisah, tetapi kita kembali. Bagiku, itu membuktikan bahwa cinta kita nyata.`,
+
+        lg: "中文",
+        nav: ["Tentang Kamu", "Profilmu", "Cerita Kita"],
+        name: "Dewiku",
+        w: [
+            "Cantik",
+            "Baik hati",
+            "Cerdas",
+            "Kuat",
+            "Lembut",
+            "Tulus",
+            "Ceria",
+            "Pengertian"
+        ]
+    },
+
+    zh: {
+        p1: `给你，那个总是让我的每一天变得更美好的人。
+
+我不知道该从哪里说起，因为你身上让我钦佩的地方实在太多了。也许就从你的笑容开始吧。每次你笑，我心里所有的疲惫都会瞬间消失。那个笑容很简单，但对我来说，就像清晨的阳光，温暖了我小小的世界。
+
+你是一个心地善良的人。即使自己很累，你也依然关心别人。你倾听的方式，你问候的方式，你鼓励人的方式，都让我觉得自己被珍惜。在你身边，我不需要假装成别人。我可以做我自己，带着所有的不完美，而你依然接受真实的我。
+
+你也非常聪明而坚强。我看到你如何冷静地面对问题，如何在跌倒后重新站起来，又如何不断努力追逐自己的梦想。你的力量激励我成为更好的人。每一天，我都从你身上学到一些东西：耐心、勇气，还有真诚的意义。
+
+我喜欢你笑的样子。你的笑声自然而真诚，每次听到，我都会无缘无故地跟着开心。我喜欢你说话的方式，声音温柔，却充满意义。我甚至喜欢那些你自己可能都没有察觉的小细节，比如你挑选词语的方式、你看人的眼神，还有你让平凡的事变得特别的样子。
+
+我还喜欢你用一颗温柔的心过生活。你珍惜小小的事物，疼爱身边的人，总是在每一种处境里寻找美好的一面。这样的品质很难得，我很庆幸能认识它。因为有你这样的人存在，世界变得更友善，而对我来说，你是发生在我身上最美好的事情之一。
+
+你也很善解人意。我做错的时候，你不会马上生气，而是试着去理解。我难过的时候，你不用我开口就会出现。你的陪伴让我明白，爱不只是甜言蜜语，更是愿意留下来、愿意在乎。
+
+虽然我们说着不同的语言，我的心却始终懂你。这就是我开始学印尼语的原因，为了能离你更近一点，并用你听得懂的话说出我的心意。我学会的每一个新单词，都是我在告诉你，你对我有多重要。
+
+和你在一起，简单的小事都会变成珍贵的回忆。小小的聊天、简短的消息、我们一起分享的笑声，一切都那么温暖。你让我相信，幸福不一定要很大，只要真心相伴就够了。
+
+我也想让你知道，我为你感到骄傲。我为你付出的每一份努力骄傲，不管有多小。你不需要完美，因为在我心里，你已经很了不起。无论你梦想什么，我都愿意站在你身边支持你，在你犹豫时握住你的手，在你成功时和你一起庆祝。
+
+如果有一天你觉得累了，或者怀疑自己，请记得，有一个人始终相信你。你很珍贵，你被爱着，你值得拥有这个世界上所有美好的事物。
+
+谢谢你出现在我的生命里。谢谢你的耐心、温暖和真诚。你不只是我爱的人，也是我的朋友、我的鼓励，还有我心的归处。我希望自己能一直让你微笑，就像你一直让我微笑一样。
+
+我依然爱你，今天、明天，直到永远，我的挚爱，全心全意。`,
+
+        p3: `我们的旅程
+
+我们的关系并不总是一帆风顺。有一段时间，我们彼此沉默，不是因为吵架，而是因为新鲜感慢慢褪去了。我们各自过着自己的日子，看不见的距离在我们之间慢慢长大。那段冷淡的日子并不容易，但我学到了，感情也需要用心经营。
+
+后来又来了一段更难的时光。我的账号坏了，好几个月我们都联系不上。没有消息，没有音讯，只有安静。但在那片安静里，有一件事变得很清楚：我从来没有忘记你，你也没有忘记我。
+
+现在我们重逢了。那种感觉，就像重新找回了一件极其珍贵的东西。我很感恩我们得到了第二次机会，这一次，我想把它守护得更好。谢谢你没有忘记我。
+
+我们曾经冷淡，我们曾经分开，但我们回来了。对我来说，这证明了我们的爱是真的。`,
+
+        lg: "Indonesia",
+        nav: ["夸夸你", "你的主页", "我们的故事"],
+        name: "我的女神",
+        w: [
+            "美丽",
+            "善良",
+            "聪明",
+            "坚强",
+            "温柔",
+            "真诚",
+            "开朗",
+            "善解人意"
+        ]
+    }
+};
+
+/* 中间页面装饰文字的位置 */
+const POS = [
+    [30, 0],
+    [1, 14],
+    [67, 12],
+    [-1, 38],
+    [70, 40],
+    [1, 64],
+    [68, 66],
+    [4, 88],
+    [64, 90]
+];
+
+let L = "id";
+let P = 0;
+
+/* 创建段落 */
+function paras(el, text, heading) {
+    el.innerHTML = "";
+
+    text.split(/\n\n/).forEach((part, index) => {
+        const p = document.createElement("p");
+        p.textContent = part;
+
+        if (heading && index === 0) {
+            p.className = "h";
+        }
+
+        el.appendChild(p);
+    });
+}
+
+/* 更新页面 */
+function render() {
+    const d = D[L];
+
+    document.documentElement.lang = L === "zh" ? "zh" : "id";
+
+    document.getElementById("lg").textContent = d.lg;
+
+    paras(
+        document.querySelector("#s0 .card"),
+        d.p1,
+        false
+    );
+
+    paras(
+        document.querySelector("#s2 .card"),
+        d.p3,
+        true
+    );
+
+    /* 更新中间页面的装饰文字 */
+    const halo = document.querySelector(".halo");
+
+    halo.querySelectorAll(".w").forEach(el => el.remove());
+
+    [d.name].concat(d.w).forEach((text, index) => {
+        const span = document.createElement("span");
+
+        span.className = "w" + (index === 0 ? " n" : "");
+        span.textContent = text;
+
+        span.style.left = POS[index][0] + "%";
+        span.style.top = POS[index][1] + "%";
+
+        halo.appendChild(span);
+    });
+
+    /* 更新导航文字 */
+    document.querySelectorAll("nav button").forEach((button, index) => {
+        button.textContent = d.nav[index];
+        button.classList.toggle("on", index === P);
+        button.setAttribute("aria-current", index === P ? "page" : "false");
+    });
+
+    /* 切换页面 */
+    [0, 1, 2].forEach(index => {
+        document
+            .getElementById("s" + index)
+            .classList.toggle("on", index === P);
+    });
+}
+
+/* 切换语言 */
+document.getElementById("lg").addEventListener("click", () => {
+    L = L === "id" ? "zh" : "id";
+    render();
+});
+
+/* 切换页面 */
+document.querySelectorAll("nav button").forEach((button, index) => {
+    button.addEventListener("click", () => {
+        P = index;
+        render();
+        window.scrollTo(0, 0);
+    });
+});
+
+/* 初始化 */
+render();
+</script>
+
+</body>
+</html>
